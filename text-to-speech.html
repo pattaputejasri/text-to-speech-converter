@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+	<style>
+		#id1{background-color:black;padding:50px 50px;border:2px dotted blue;width:40%;text-align:center;margin-left:300px;margin-top:100px;}
+		.c{width:300px;}
+		.c:hover{height:30px;background-color:yellow;width:290px;}
+		button{border:0;padding:10px 15px;color:brown;background-color:pink;}
+			#id2{height:400px;
+			background-color:red;
+			border:5px solid brown;
+
+			background-attachment:fixed;
+			background-position:bottom left;}
+		.c3{font-size:60px;color:white;background-color:#673ab7ad;text-align:center;margin-top:150px;}
+		.c4{background-color:#673ab75e;font-family:poppins;font-weight:600;color:white;font-size:17px;padding-top:40px;width:570px;}
+		
+	</style>
+</head>
+<body>
+<div style="padding-bottom:60px;">
+	<div id="id2" style="background-image:url('wallpaper.jpg')"><p class="c3">Text To Speech</p></div>
+    	<div id="id1">
+    		<span style="color:pink;">Select Voice:</span> <select id='voiceList'></select> <br><br>
+	
+    		<span style="color:pink;">Enter Text:</span><input id='txtInput' class="c" /> <br><br>    
+    		<button id='btnSpeak' class="c1"><span style="font-size:20px;margin:0;">Speak!</span></button>
+	</div>
+</div>
+<div>
+	<div style="background-image:url('img123.jpeg');width:100%;height:300px;">
+		<pre class="c4">
+		CONTACT DETAILS:
+		PHONE NUMBER:90001546218
+		EMAIL:srinonooo@gamil.com
+		ADDRESS:Dhabedi-dhebidey pvt,mayalokam,indarpuram.
+		</pre>
+	</div>
+	
+</div>
+    <script>
+        var txtInput = document.querySelector('#txtInput');
+        var voiceList = document.querySelector('#voiceList');
+        var btnSpeak = document.querySelector('#btnSpeak');
+        var synth = window.speechSynthesis;
+        var voices = [];
+
+        PopulateVoices();
+        if(speechSynthesis !== undefined){
+            speechSynthesis.onvoiceschanged = PopulateVoices;
+        }
+
+        btnSpeak.addEventListener('click', ()=> {
+            var toSpeak = new SpeechSynthesisUtterance(txtInput.value);
+            var selectedVoiceName = voiceList.selectedOptions[0].getAttribute('data-name');
+            voices.forEach((voice)=>{
+                if(voice.name === selectedVoiceName){
+                    toSpeak.voice = voice;
+                }
+            });
+            synth.speak(toSpeak);
+        });
+
+        function PopulateVoices(){
+            voices = synth.getVoices();
+            var selectedIndex = voiceList.selectedIndex < 0 ? 0 : voiceList.selectedIndex;
+            voiceList.innerHTML = '';
+            voices.forEach((voice)=>{
+                var listItem = document.createElement('option');
+                listItem.textContent = voice.name;
+                listItem.setAttribute('data-lang', voice.lang);
+                listItem.setAttribute('data-name', voice.name);
+                voiceList.appendChild(listItem);
+            });
+
+            voiceList.selectedIndex = selectedIndex;
+        }
+    </script>
+</body>
+</html>
